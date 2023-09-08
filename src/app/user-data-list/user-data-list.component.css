@@ -1,0 +1,25 @@
+/* Add/Edit Section */
+.add-edit-section {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  /* Table Section */
+  .table-section {
+    border: 1px solid #ccc;
+    padding: 20px;
+  }
+  
+  /* Table Styles */
+  .table-section table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table-section th, .table-section td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+  }
+  

@@ -1,0 +1,134 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+      <div class="navbar-header">
+          <a class="navbar-brand" href="#">Global Bilgi</a>
+      </div>
+      <ul class="nav navbar-nav">
+          <li class="active"><a href="#" (click)="isAdmin = false">Yeni Kayıt Ekle</a></li>
+          <li><a href="#" (click)="isAdmin = true">Admin Ekranı</a></li>
+      </ul>
+  </div>
+</nav>
+
+<div class="container add-edit-section" *ngIf="!isAdmin">
+  <div class="row">
+    <div class="col-xs-12">
+      <h3>{{!isEdit ? "Yeni Kayıt Ekle" : "Düzenle"}}</h3>
+      <form (ngSubmit)="onSubmit()" [formGroup]="newRecordForm">
+        <div class="row">
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label for="begin">Başlangıç:</label>
+              <input type="text" class="form-control" id="begin" formControlName="begin">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label for="end">Bitiş:</label>
+              <input type="text" class="form-control" id="end" formControlName="end">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label for="dateInfo">Tarih:</label>
+              <input type="text" class="form-control" id="dateInfo" formControlName="dateInfo">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label for="excuse">Mazeret:</label>
+              <input type="text" class="form-control" id="excuse" formControlName="excuse">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label for="excuseHours">Mazeret Saati:</label>
+              <input type="number" class="form-control" id="excuseHours" formControlName="excuseHours">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label for="timeout">Mola:</label>
+              <input type="number" class="form-control" id="timeout" formControlName="timeout">
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 text-center">
+          <button type="submit" class="btn btn-primary">{{!isEdit ? "Ekle" : "Onayla"}}</button>
+        </div>
+      </form>
+      <div class="col-xs-12 text-center">
+        <button class="btn btn-danger" *ngIf="isEdit" (click)="cancelEdit()">İptal</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container table-section" *ngIf="!isAdmin">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Başlangıç</th>
+          <th>Bitiş</th>
+          <th>Tarih</th>
+          <th>Mazeret</th>
+          <th>Mazeret Saati</th>
+          <th>Mola</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of userDataList; let i = index">
+          <td>{{ record.begin }}</td>
+          <td>{{ record.end }}</td>
+          <td>{{ record.dateInfo }}</td>
+          <td>{{ record.excuse }}</td>
+          <td>{{ record.excuseHours }}</td>
+          <td>{{ record.timeout }}</td>
+          <td>
+            <button class="btn btn-primary" (click)="loadFormValuesForEdit(record)" *ngIf="!isEdit">
+              <i class="fas fa-edit"></i> <!-- Edit Icon -->
+            </button>
+            <button class="btn btn-danger" (click)="removeRecord(record)" *ngIf="!isEdit">
+              <i class="fas fa-trash-alt"></i> <!-- Remove Icon -->
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+
+  <div class="container table-section" *ngIf="isAdmin">
+    <h3>Additional User Data</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>İsim</th>
+          <th>Soyisim</th>
+          <th>Sicil</th>
+          <th>Tarig</th>
+          <th>Başlangıç</th>
+          <th>Bitiş</th>
+          <th>Mola</th>
+          <th>Mazeret</th>
+          <th>Mazeret Saati</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of additionalUserDataList; let i = index">
+          <td>{{ record.firstName }}</td>
+          <td>{{ record.lastName }}</td>
+          <td>{{record.agentId}}</td>
+          <td>{{ record.dateInfo }}</td>
+          <td>{{ record.begin }}</td>
+          <td>{{ record.end }}</td>
+          <td>{{ record.timeout }}</td>
+          <td>{{ record.excuse }}</td>
+          <td>{{ record.excuseHours }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  
