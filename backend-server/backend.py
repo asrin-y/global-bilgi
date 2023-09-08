@@ -1,24 +1,22 @@
 from flask import Flask, jsonify, request
 import sqlite3
-from flask_cors import CORS  # Import Flask-CORS
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
 
-# Initialize the SQLite database
 conn = sqlite3.connect('userData.db', check_same_thread=False)
 cursor = conn.cursor()
 
-# Create the 'books' table if it doesn't exist
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS userData (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         agentId TEXT,
         firstName TEXT,
         lastName TEXT,
-        begin TEXT,
-        end TEXT,
-        dateInfo TEXT,
+        begin TIME,
+        end TIME,
+        dateInfo DATE,
         excuse TEXT,
         excuseHours INTEGER,
         timeout INTEGER
@@ -35,13 +33,10 @@ def get_records_by_agent(agentId):
 
 @app.route('/getAllRecords', methods=['GET'])
 def get_all_records():
-    try:
-        cursor.execute('SELECT * FROM userData')
-        records = cursor.fetchall()
-        records_dict = [{"id": row[0], "agentId": row[1], "firstName": row[2], "lastName": row[3], "begin": row[4], "end": row[5], "dateInfo": row[6], "excuse": row[7], "excuseHours": row[8], "timeout": row[9]} for row in records]
-        return jsonify(records_dict)
-    finally:
-        cursor.close()
+    cursor.execute('SELECT * FROM userData')
+    records = cursor.fetchall()
+    records_dict = [{"id": row[0], "agentId": row[1], "firstName": row[2], "lastName": row[3], "begin": row[4], "end": row[5], "dateInfo": row[6], "excuse": row[7], "excuseHours": row[8], "timeout": row[9]} for row in records]
+    return jsonify(records_dict)
 
 @app.route('/addUserData', methods=['POST'])
 def add_user_data():
@@ -121,7 +116,6 @@ def update_user_data(id):
 
     # Return a success message
     return jsonify({"message": "User data updated successfully"}), 200
-
 
 if __name__ == '__main__':
     app.run(debug=True)
