@@ -1,5 +1,7 @@
 <div class="container">
   <div class="row">
-    <app-user-data-list></app-user-data-list>
+    <app-navbar (isCurrentPageAdmin)="isAdminPageActive = $event"></app-navbar>
+    <app-user-data-list *ngIf="!isAdminPageActive"></app-user-data-list>
+    <app-admin-list *ngIf="isAdminPageActive"></app-admin-list>
   </div>
 </div>

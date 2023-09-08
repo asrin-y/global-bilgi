@@ -1,0 +1,45 @@
+<div class="container" style="margin-bottom: 20px;">
+  <h4>Date Range Filter</h4>
+  <label for="startDatePicker">Start Date:</label>
+  <input type="date" id="startDatePicker" [(ngModel)]="startDate">
+  <label for="endDatePicker"
+    style="margin-left: 15px;">End Date:</label>
+  <input type="date" id="endDatePicker" 
+    [(ngModel)]="endDate">
+  <button (click)="applyDateRangeFilter()" 
+    class="btn btn-primary"
+    style="margin-left: 15px;">Apply Filter</button>
+</div>
+
+
+<div class="container table-section">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>İsim</th>
+          <th>Soyisim</th>
+          <th>Sicil</th>
+          <th>Tarih</th>
+          <th>Başlangıç</th>
+          <th>Bitiş</th>
+          <th>Mola</th>
+          <th>Mazeret</th>
+          <th>Mazeret Saati</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of additionalUserDataList; let i = index">
+          <td>{{ record.firstName }}</td>
+          <td>{{ record.lastName }}</td>
+          <td>{{record.agentId}}</td>
+          <td>{{ record.dateInfo }}</td>
+          <td>{{ record.begin }}</td>
+          <td>{{ record.end }}</td>
+          <td>{{ record.timeout }}</td>
+          <td>{{ record.excuse }}</td>
+          <td>{{ record.excuseHours }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

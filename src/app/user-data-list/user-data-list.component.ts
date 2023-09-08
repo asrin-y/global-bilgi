@@ -15,15 +15,12 @@ export class UserDataListComponent implements OnInit {
   private apiBaseUrl = 'http://localhost:5000';
   isEdit: boolean = false;
   editedRecordId: number;
-  isAdmin: boolean = false;
-  additionalUserDataList: UserData[] = [];
 
   constructor(private userDataService: UserDataService, private formBuilder: FormBuilder, private http: HttpClient) {
     this.initializeForm();
   }
 
   initializeForm() {
-    // Define a custom validator function for the first three fields
     const nonEmptyFieldsValidator = (control: AbstractControl): { [key: string]: boolean } | null => {
       const begin = control.get('begin').value;
       const end = control.get('end').value;
@@ -43,25 +40,13 @@ export class UserDataListComponent implements OnInit {
       excuse: [''],
       excuseHours: [null],
       timeout: [null]
-    }, { validator: nonEmptyFieldsValidator }); // Attach the custom validator
+    }, { validator: nonEmptyFieldsValidator });
   }
 
   ngOnInit(): void {
-    this.fetchUserData(); // Fetch initial data when the component initializes
-    // this.fetchAdditionalUserData();
+    this.fetchUserData();
   }
 
-  // Fetch additional data from the new API endpoint
-  fetchAdditionalUserData() {
-    // this.http.get(`${this.apiBaseUrl}/getAllRecords`).subscribe(
-    //   (data: any[]) => {
-    //     this.additionalUserDataList = data;
-    //   },
-    //   (error) => {
-    //     console.error('Failed to fetch additional user data:', error);
-    //   }
-    // );
-  }
 
   editRecord(record: UserData) {
     this.isEdit = !this.isEdit
@@ -73,11 +58,10 @@ export class UserDataListComponent implements OnInit {
       return;
     }
 
-    // Make an HTTP DELETE request to delete the record
     this.http.delete(`${this.apiBaseUrl}/deleteUserData/${idToDelete}`).subscribe(
       () => {
         console.log('User data deleted successfully');
-        this.fetchUserData(); // Fetch data after a successful deletion
+        this.fetchUserData();
       },
       (error) => {
         console.error('Failed to delete user data:', error);
@@ -88,6 +72,7 @@ export class UserDataListComponent implements OnInit {
   logFormValues() {
     const formValues = this.newRecordForm.value;
     console.log('Form Values:', formValues);
+
 
     const userData = {
       agentId: "glb901",
@@ -106,7 +91,7 @@ export class UserDataListComponent implements OnInit {
     this.http.post(`${this.apiBaseUrl}/addUserData`, userData).subscribe(
       (response) => {
         console.log('User data added successfully:', response);
-        this.fetchUserData(); // Fetch data after a successful addition
+        this.fetchUserData();
       },
       (error) => {
         console.error('Failed to add user data:', error);
@@ -116,18 +101,16 @@ export class UserDataListComponent implements OnInit {
 
   onSubmit() {
     if (!this.isEdit) {
-      // Check if the form is valid, including the custom validator
       if (this.newRecordForm.valid) {
         this.logFormValues();
       } else {
-        // Form is not valid
-        // You can handle this case, e.g., display an error message to the user.
-        window.alert('Form is not valid. Make sure all required fields are filled.');
+        window.alert('Başlangıç, Bitiş ve Tarih boş bırakılamaz!');
         return;
       }
     } else {
       this.isEdit = !this.isEdit;
       this.update();
+      this.editedRecordId = -1;
     }
     this.newRecordForm.reset();
   }
@@ -148,7 +131,7 @@ export class UserDataListComponent implements OnInit {
     this.http.put(`${this.apiBaseUrl}/updateUserData/${this.editedRecordId}`, userData).subscribe(
       (response) => {
         console.log('User data updated successfully:', response);
-        this.fetchUserData(); // Fetch data after a successful addition
+        this.fetchUserData();
       },
       (error) => {
         console.error('Failed to add user data:', error);
@@ -157,14 +140,12 @@ export class UserDataListComponent implements OnInit {
   }
 
   fetchUserData() {
-    // Fetch the list of data from your service
     this.userDataService.getRecordsByAgent().subscribe((data) => {
       this.userDataList = data;
     });
   }
 
   loadFormValuesForEdit(record: UserData) {
-    // Assuming you have a UserData model with properties matching the form fields
     this.newRecordForm.setValue({
       begin: record.begin,
       end: record.end,
@@ -176,13 +157,13 @@ export class UserDataListComponent implements OnInit {
   
     this.editedRecordId = record.id;
   
-    // Set the isEdit flag to true to indicate that it's an edit operation
     this.isEdit = true;
   }
 
   cancelEdit(){
     this.isEdit = !this.isEdit;
     this.newRecordForm.reset();
+    this.editedRecordId = -1;
   }
   
 }
